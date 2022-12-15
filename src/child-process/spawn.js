@@ -115,6 +115,13 @@ exec('"my script.cmd" a b', (err, stdout, stderr) => {
 
  */
 
+const prime_numbers = spawn("node", ['./primeNumber.js']);
+
+prime_numbers.stdout.on('data', function (data) {
+  let result = `list of prime numbers are : ${data}`
+  log(result)
+})
+
 
 
 
