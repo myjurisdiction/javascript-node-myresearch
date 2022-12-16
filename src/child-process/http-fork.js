@@ -6,7 +6,9 @@ const server = http.createServer((req, res) => {
     switch (req.url) {
         case '/compute':
             let forked = fork('./primeNumber.js');
+            console.log(`new forked sub-process pid : ${forked.pid}`)
             forked.on('message', (msg) => {
+                console.log('message from child process', msg.length);
                 res.statusCode = 200;
                 res.write(JSON.stringify(msg));
                 res.end();

@@ -1,11 +1,14 @@
 function listPrime(num) {
-    const array = [];
-    for (let i = 0; i < num; i++) {
-        if (is_prime(i)) {
-            array.push(i);
+    return new Promise((resolve) => {
+        const array = [];
+        for (let i = 0; i < num; i++) {
+            if (is_prime(i)) {
+                array.push(i);
+            }
         }
-    }
-    return array
+        resolve(array);
+    })
+
 }
 
 function is_prime(num) {
@@ -40,11 +43,21 @@ function is_prime(num) {
 
 // console.log(listPrime(10000000))
 
-
-
-
-
-process.on('message', (msg) => {
-    const result = listPrime(msg);
+process.on('message', async (msg) => {
+    console.log('start');
+    let startTime = Date.now();
+    const result = await listPrime(msg);
+    console.log('total length: ', result.length)
+    console.log('end', Date.now() - startTime);
     process.send(result)
+    console.log('ready to exit now');
+    const processExitInitiation = Date.now();
+    setTimeout(() => {
+        console.log('exiting process after 500 ms !!', Date.now() - processExitInitiation);
+        process.exit();
+    }, 500)
+})
+
+process.on('exit', function (code, signal) {
+    console.log(`process ${process.pid} has exited !!`);
 })
